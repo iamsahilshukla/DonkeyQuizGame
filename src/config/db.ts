@@ -1,11 +1,11 @@
 import mongoose from 'mongoose';
 import colors from 'colors';
+import dotenv from 'dotenv';
 
+dotenv.config();
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(
-      'mongodb://localhost:27017/donkey-quiz'
-    );
+    const conn = await mongoose.connect(process.env.MONGODB_URI!);
     console.log(colors.cyan(`MongoDB Connected: ${conn.connection.host}`));
   } catch (error) {
     console.error(colors.red(`MongoDB Connection Error: ${error}`));

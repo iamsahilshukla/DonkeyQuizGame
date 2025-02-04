@@ -2,11 +2,13 @@
 import http from 'http';
 import mongoose from 'mongoose';
 import { Server } from 'socket.io';
+import dotenv from 'dotenv';
 import app from './app';
 import { initializeGameSocket } from './sockets/game.socket';
 import { connectDB } from './config/db';
 
-const PORT = process.env.PORT || 9000;
+dotenv.config();
+const PORT = process.env.PORT;
 const server = http.createServer(app);
 
 // Database connection
