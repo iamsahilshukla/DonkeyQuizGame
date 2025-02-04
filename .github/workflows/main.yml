@@ -28,9 +28,7 @@ jobs:
           EC2_INSTANCE_ID: ${{ secrets.EC2_INSTANCE_ID }}
         run: |
           sudo apt-get update
-          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-          unzip awscliv2.zip
-          sudo ./aws/install
+          sudo snap install aws-cli --classic
           aws ec2 describe-instances --instance-ids $EC2_INSTANCE_ID
           scp -i /path/to/key.pem -r ./* ec2-user@${{ secrets.EC2_INSTANCE_IP }}:/var/www/html
           ssh -i /path/to/key.pem ec2-user@${{ secrets.EC2_INSTANCE_IP }} 'sudo systemctl restart nginx'
