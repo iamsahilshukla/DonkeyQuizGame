@@ -1,5 +1,5 @@
 // src/app.ts
-import express from 'express';
+import express, { Router } from 'express';
 import cors from 'cors';
 import { router as adminRouter } from './routes/admin.routes';
 import { sessionRouter } from './routes/session.routes';
@@ -14,6 +14,13 @@ app.use(express.json());
 // Routes
 app.use('/api/admin', adminRouter);
 app.use('/api/session', sessionRouter);
+
+app.use(
+  '/',
+  Router().get('/', async (): Promise<any> => {
+    return { message: 'Welcome to the Quiz App!' };
+  })
+);
 
 // Error handling
 // app.use(errorHandler);

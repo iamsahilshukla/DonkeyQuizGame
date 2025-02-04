@@ -7,7 +7,9 @@ import { randomUUID } from 'crypto';
 export function initializeGameSocket(io: Server) {
   io.on('connection', (socket) => {
     console.log('User Joined');
-    socket.on('join_session', async ({ roomId, username }) => {
+    socket.on('join_session', async (data) => {
+      const { roomId, username } = JSON.parse(data);
+
       try {
         socket.join(roomId);
 
@@ -32,9 +34,14 @@ export function initializeGameSocket(io: Server) {
       }
     });
 
-    socket.on('submit_answer', ({ roomId, userId, answer }) => {
-      const leaderboard = sessionService.submitAnswer(roomId, userId, answer);
-      io.emit('leaderboard_update', leaderboard);
+    socket.on('submit_answer', ({ roomId, answer }) => {
+      const leaderboard = sessionService.submitAnswer(
+        roomId,
+        socket.id,
+        answer
+      );
+      console.log('---->leaderboard', leaderboard);
+      socket.emit('leaderboard_update', leaderboard);
     });
 
     socket.on('start_game', async (data) => {
@@ -45,7 +52,7 @@ export function initializeGameSocket(io: Server) {
 
       for (const [index, question] of session.questions.entries()) {
         session.currentQuestionIndex = index;
-        io.emit('new_question', question);
+        socket.broadcast.emit('new_question', question);
 
         await new Promise((resolve) =>
           setTimeout(resolve, question.timeLimit * 1000)

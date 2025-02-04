@@ -25,19 +25,18 @@ class SessionService {
 
   joinSession(roomId: string, participant: Participant): Session {
     const session = this.getSession(roomId);
-    session.participants.set(participant.id, participant);
+    session.participants.set(participant.socketId, participant);
     return session;
   }
 
   submitAnswer(
     roomId: string,
-    userId: string,
+    username: string,
     answer: string
   ): LeaderboardEntry[] {
     const session = this.getSession(roomId);
     const question = session.questions[session.currentQuestionIndex];
-    const participant = session.participants.get(userId);
-
+    const participant = session.participants.get(username);
     if (question && participant && answer === question.correctAnswer) {
       participant.score += question.points;
       this.updateLeaderboard(session);
