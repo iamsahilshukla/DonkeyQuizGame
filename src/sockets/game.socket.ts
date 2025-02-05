@@ -22,12 +22,9 @@ export function initializeGameSocket(io: Server) {
 
         console.log('Session joined:', roomId, participant.name);
 
-        socket.emit('session_joined', {
-          participants: Array.from(session.participants.values()),
-          leaderboard: session.leaderboard,
-        });
+        io.emit('session_joined', participant.name);
 
-        socket.emit('participant_joined', participant);
+        io.emit('participant_joined', participant);
       } catch (error) {
         socket.emit('error', 'Failed to join session');
       }

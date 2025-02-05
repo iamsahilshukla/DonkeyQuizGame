@@ -3,7 +3,6 @@ import { Question } from '../models/QuizQuestion';
 
 export const createQuestion = async (req: Request, res: Response) => {
   try {
-    console.log('------>createQuestion', req.body);
     const question = new Question(req.body);
     await question.save();
     res.status(201).json(question);
