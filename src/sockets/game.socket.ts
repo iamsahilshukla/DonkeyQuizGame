@@ -2,7 +2,6 @@
 import { Server } from 'socket.io';
 import { sessionService } from '../services/SessionManager';
 import { randomUUID } from 'crypto';
-// import { Question } from '../models/question.model';
 
 export function initializeGameSocket(io: Server) {
   io.on('connection', (socket) => {
@@ -40,8 +39,7 @@ export function initializeGameSocket(io: Server) {
         socket.id,
         answer
       );
-      console.log('---->leaderboard', leaderboard);
-      socket.emit('leaderboard_update', leaderboard);
+      io.emit('leaderboard_update', leaderboard);
     });
 
     socket.on('start_game', async (data) => {

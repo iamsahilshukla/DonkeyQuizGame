@@ -3,7 +3,6 @@ import express, { Router } from 'express';
 import cors from 'cors';
 import { router as adminRouter } from './routes/admin.routes';
 import { sessionRouter } from './routes/session.routes';
-// import { errorHandler } from './middleware/error.middleware';
 
 const app = express();
 

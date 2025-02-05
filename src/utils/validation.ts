@@ -2,11 +2,11 @@ import { NextFunction, Request, Response } from 'express';
 import { z, ZodSchema } from 'zod';
 
 export const createQuestionSchema = z.object({
-  text: z.string().min(10),
+  text: z.string().min(5),
   options: z.array(z.string().min(1)).length(4),
-  correctAnswer: z.string().min(1),
+  correctAnswer: z.string().min(5),
   timeLimit: z.number().min(10).max(120),
-  points: z.number().min(50).max(500),
+  points: z.number().min(10).max(500),
 });
 
 export const joinSessionSchema = z.object({
@@ -22,7 +22,7 @@ export const validate =
     } catch (error) {
       res.status(400).json({
         error: 'Validation failed',
-        // details: error.errors,
+        details: error,
       });
     }
   };

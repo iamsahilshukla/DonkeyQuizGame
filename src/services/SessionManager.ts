@@ -34,15 +34,20 @@ class SessionService {
     username: string,
     answer: string
   ): LeaderboardEntry[] {
-    const session = this.getSession(roomId);
-    const question = session.questions[session.currentQuestionIndex];
-    const participant = session.participants.get(username);
-    if (question && participant && answer === question.correctAnswer) {
-      participant.score += question.points;
-      this.updateLeaderboard(session);
-    }
+    try {
+      const session = this.getSession(roomId);
+      const question = session.questions[session.currentQuestionIndex];
+      const participant = session.participants.get(username);
+      if (question && participant && answer === question.correctAnswer) {
+        participant.score += question.points;
+        this.updateLeaderboard(session);
+      }
 
-    return session.leaderboard;
+      return session.leaderboard;
+    } catch (e) {
+      console.error('Error submitting answer:', (e as Error).message);
+      return [];
+    }
   }
 
   getSession(roomId: string): Session {
