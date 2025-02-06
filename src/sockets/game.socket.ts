@@ -3,6 +3,12 @@ import { Server } from 'socket.io';
 import { sessionService } from '../services/SessionManager';
 import { randomUUID } from 'crypto';
 
+interface ChatMessage {
+  username: string;
+  message: string;
+  timestamp: number;
+}
+
 export function initializeGameSocket(io: Server) {
   io.on('connection', (socket) => {
     console.log('User Joined');
@@ -55,6 +61,20 @@ export function initializeGameSocket(io: Server) {
 
       io.emit('game_ended', session.leaderboard);
       sessionService.endSession(roomId);
+    });
+
+    // Add new chat event handler
+    socket.on('send_message', (data) => {
+      const { roomId, username, message } = JSON.parse(data);
+      
+      const chatMessage: ChatMessage = {
+        username,
+        message,
+        timestamp: Date.now()
+      };
+
+      // Broadcast the message to all users in the room
+      io.to(roomId).emit('new_message', chatMessage);
     });
 
     socket.on('disconnect', () => {
