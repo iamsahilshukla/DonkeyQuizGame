@@ -1,7 +1,5 @@
 import { Router } from 'express';
 import { sessionService } from '../services/SessionManager';
-import { validate } from '../utils/validation';
-import { joinSessionSchema } from '../utils/validation';
 import { Question } from '../models/QuizQuestion';
 
 const router = Router();

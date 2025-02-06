@@ -18,13 +18,12 @@ export function initializeGameSocket(io: Server) {
           score: 0,
           socketId: socket.id,
         };
-        const session = sessionService.joinSession(roomId, participant);
 
-        console.log('Session joined:', roomId, participant.name);
+        sessionService.joinSession(roomId, participant);
 
-        io.emit('session_joined', participant.name);
+        socket.emit('session_joined', participant.name);
 
-        io.emit('participant_joined', participant);
+        socket.broadcast.emit('participant_joined', participant);
       } catch (error) {
         socket.emit('error', 'Failed to join session');
       }
@@ -59,7 +58,7 @@ export function initializeGameSocket(io: Server) {
     });
 
     socket.on('disconnect', () => {
-      // Handle disconnection logic
+      io.emit('participant_left', socket.id);
     });
   });
 }
